@@ -31,37 +31,100 @@
             color: white;
             border-color: #2563eb;
         }
+        /* Умные рамки для текста */
+        .info-text {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        .info-text.expanded {
+            max-height: none;
+        }
+        .info-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, white);
+            pointer-events: none;
+        }
+        .info-text.expanded::after {
+            display: none;
+        }
+        /* Мобильное меню */
+        .mobile-menu {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .mobile-menu.open {
+                display: block;
+            }
+            .modal-content {
+                margin: 1rem;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        }
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Навигация -->
-    <nav class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-14">
                 <div class="flex items-center">
-                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
-                    <span class="ml-2 text-xl font-semibold text-gray-900">TeachApp</span>
+                    <span class="ml-2 text-lg font-semibold text-gray-900">TeachApp</span>
                 </div>
-                <div class="flex items-center space-x-1">
-                    <a href="/" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Главная</a>
-                    <a href="/books_page" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Библиотека</a>
-                    <a href="/information" class="bg-gray-100 text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Информация</a>
-                    <a href="/files" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Файлы</a>
+                <div class="desktop-nav flex items-center space-x-1">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Главная</a>
+                    <a href="/books_page" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Библиотека</a>
+                    <a href="/information" class="bg-gray-100 text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Информация</a>
+                    <a href="/files" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Файлы</a>
+                    <a href="/desk" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Доска</a>
                 </div>
+                <button class="mobile-menu-btn p-2" onclick="toggleMobileMenu()">
+                    <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            <div id="mobileMenu" class="mobile-menu pb-3">
+                <a href="/" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Главная</a>
+                <a href="/books_page" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Библиотека</a>
+                <a href="/information" class="block px-3 py-2 rounded-md text-sm font-medium bg-gray-100 text-gray-900">Информация</a>
+                <a href="/files" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Файлы</a>
+                <a href="/desk" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Доска</a>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto py-6 px-4">
         <!-- Заголовок -->
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Информация</h1>
-                <p class="text-gray-600">Заметки и материалы по предметам</p>
+                <p class="text-gray-600 text-sm sm:text-base">Заметки и материалы по предметам</p>
             </div>
-            <button onclick="showAddInfoModal()" class="btn-primary px-4 py-2 rounded-md text-sm font-medium flex items-center">
+            <button onclick="showAddInfoModal()" class="btn-primary px-4 py-2 rounded-md text-sm font-medium flex items-center justify-center w-full sm:w-auto">
                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
@@ -71,11 +134,11 @@
 
         <!-- Поиск -->
         <div class="mb-6">
-            <div class="flex gap-2 max-w-2xl">
-                <div class="flex-1 relative">
-                    <input type="text" id="searchInput" oninput="searchInformation()" placeholder="Поиск по названию или содержанию..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <div class="flex flex-col sm:flex-row gap-2">
+                <div class="flex-1">
+                    <input type="text" id="searchInput" oninput="searchInformation()" placeholder="Поиск..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <button onclick="searchInformation()" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 flex items-center">
+                <button onclick="searchInformation()" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 flex items-center justify-center">
                     <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
@@ -92,7 +155,7 @@
         </div>
 
         <!-- Список информации -->
-        <div id="informationList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div id="informationList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <!-- Записи будут загружены через JavaScript -->
         </div>
 
@@ -103,11 +166,11 @@
     </main>
 
     <!-- Модальное окно -->
-    <div id="addInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 w-full max-w-lg">
+    <div id="addInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="modal-content bg-white rounded-lg p-4 sm:p-6 w-full max-w-lg">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-900">Добавить запись</h2>
-                <button onclick="hideAddInfoModal()" class="text-gray-400 hover:text-gray-600">
+                <button onclick="hideAddInfoModal()" class="text-gray-400 hover:text-gray-600 p-1">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -124,10 +187,14 @@
                     <datalist id="subjectsList"></datalist>
                 </div>
                 <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CSS стили (опционально)</label>
+                    <input type="text" name="css" placeholder="Например: color: red; font-size: 18px;" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Содержание *</label>
                     <textarea name="text" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                 </div>
-                <div class="flex justify-end space-x-2">
+                <div class="flex flex-col sm:flex-row gap-2 sm:justify-end">
                     <button type="button" onclick="hideAddInfoModal()" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm font-medium">Отмена</button>
                     <button type="submit" class="btn-primary px-4 py-2 rounded-md text-sm font-medium">Сохранить</button>
                 </div>
@@ -136,6 +203,11 @@
     </div>
 
     <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+        }
+
         let currentSubject = 'all';
         let allInformation = [];
 
@@ -154,7 +226,6 @@
             const subjects = [...new Set(allInformation.map(item => item.subject).filter(Boolean))];
             const subjectsFilter = document.getElementById('subjectsFilter');
             const subjectsList = document.getElementById('subjectsList');
-
             subjectsFilter.innerHTML = '';
 
             const allButton = document.createElement('button');
@@ -196,23 +267,31 @@
 
             information.forEach(function(info) {
                 const infoCard = document.createElement('div');
-                infoCard.className = 'bg-white border border-gray-200 rounded-lg p-4';
+                infoCard.className = 'bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-colors';
+                infoCard.onclick = () => {
+                    window.location.href = '/info/' + encodeURIComponent(info.name);
+                };
+
+                // Обрезаем текст для превью
+                const previewText = info.text && info.text.length > 150
+                    ? info.text.substring(0, 150) + '...'
+                    : info.text;
 
                 infoCard.innerHTML = `
                     <div class="flex items-start justify-between mb-2">
-                        <div class="flex-1">
+                        <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-2 mb-1">
                                 <span class="text-xs font-medium text-gray-500">${info.subject || 'Без предмета'}</span>
                             </div>
-                            <h3 class="font-semibold text-gray-900">${info.name}</h3>
+                            <h3 class="font-semibold text-gray-900 truncate">${info.name}</h3>
                         </div>
-                        <button onclick="deleteInformation('${info.name}')" class="text-gray-400 hover:text-red-600 p-1">
+                        <button onclick="event.stopPropagation(); deleteInformation('${info.name}')" class="text-gray-400 hover:text-red-600 p-1 flex-shrink-0 ml-2">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
                         </button>
                     </div>
-                    ${info.text ? `<p class="text-sm text-gray-600 whitespace-pre-wrap">${info.text}</p>` : ''}
+                    <div class="info-text text-sm text-gray-600" style="${info.css || ''}">${previewText || ''}</div>
                 `;
                 informationList.appendChild(infoCard);
             });
@@ -220,7 +299,6 @@
 
         function searchInformation() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-
             let filtered = allInformation;
 
             if (currentSubject !== 'all') {
@@ -254,9 +332,7 @@
             try {
                 const response = await fetch('/api/informations', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(infoData)
                 });
 
@@ -280,10 +356,7 @@
                     const response = await fetch('/api/informations/name/' + name, {
                         method: 'DELETE'
                     });
-
-                    if (response.ok) {
-                        loadInformation();
-                    }
+                    if (response.ok) loadInformation();
                 } catch (error) {
                     console.error('Error deleting information:', error);
                 }

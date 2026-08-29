@@ -19,92 +19,162 @@
             border-color: #3b82f6;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+        .card:active {
+            transform: scale(0.98);
+        }
+        /* Мобильное меню */
+        .mobile-menu {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .mobile-menu.open {
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Навигация -->
-    <nav class="bg-white border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between h-14">
                 <div class="flex items-center">
-                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                     </svg>
-                    <span class="ml-2 text-xl font-semibold text-gray-900">TeachApp</span>
+                    <span class="ml-2 text-lg font-semibold text-gray-900">TeachApp</span>
                 </div>
-                <div class="flex items-center space-x-1">
-                    <a href="/" class="bg-gray-100 text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Главная</a>
-                    <a href="/books_page" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Библиотека</a>
-                    <a href="/information" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Информация</a>
-                    <a href="/files" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Файлы</a>
-                    <a href="/desk" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Доска</a>
+                <!-- Десктопная навигация -->
+                <div class="desktop-nav flex items-center space-x-1">
+                    <a href="/" class="bg-gray-100 text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Главная</a>
+                    <a href="/books_page" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Библиотека</a>
+                    <a href="/information" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Информация</a>
+                    <a href="/files" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Файлы</a>
+                    <a href="/desk" class="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Доска</a>
                 </div>
+                <!-- Кнопка мобильного меню -->
+                <button class="mobile-menu-btn p-2" onclick="toggleMobileMenu()">
+                    <svg class="h-6 w-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Мобильное меню -->
+            <div id="mobileMenu" class="mobile-menu pb-3">
+                <a href="/" class="block px-3 py-2 rounded-md text-sm font-medium bg-gray-100 text-gray-900">Главная</a>
+                <a href="/books_page" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Библиотека</a>
+                <a href="/information" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Информация</a>
+                <a href="/files" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Файлы</a>
+                <a href="/desk" class="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Доска</a>
             </div>
         </div>
     </nav>
 
     <!-- Контент -->
-    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto py-6 sm:py-12 px-4">
         <!-- Заголовок -->
-        <div class="mb-12">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Enterprise Learning Platform</h1>
-            <p class="text-gray-600">Управление учебными материалами и документами</p>
+        <div class="mb-6 sm:mb-12">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Enterprise Learning Platform</h1>
+            <p class="text-gray-600 text-sm sm:text-base">Управление учебными материалами и документами</p>
         </div>
 
         <!-- Карточки -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             <!-- Библиотека -->
-            <a href="/books_page" class="card bg-white rounded-lg p-6 block">
-                <div class="flex items-center justify-between mb-4">
+            <a href="/books_page" class="card bg-white rounded-lg p-4 sm:p-6 block">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
                     <div class="p-2 bg-blue-50 rounded">
-                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">Библиотека</h3>
-                <p class="text-sm text-gray-600">Управление книгами и материалами</p>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Библиотека</h3>
+                <p class="text-xs sm:text-sm text-gray-600">Управление книгами и материалами</p>
             </a>
 
             <!-- Информация -->
-            <a href="/information" class="card bg-white rounded-lg p-6 block">
-                <div class="flex items-center justify-between mb-4">
+            <a href="/information" class="card bg-white rounded-lg p-4 sm:p-6 block">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
                     <div class="p-2 bg-yellow-50 rounded">
-                        <svg class="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">Информация</h3>
-                <p class="text-sm text-gray-600">Заметки по предметам</p>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Информация</h3>
+                <p class="text-xs sm:text-sm text-gray-600">Заметки по предметам</p>
             </a>
 
             <!-- Файлы -->
-            <a href="/files" class="card bg-white rounded-lg p-6 block">
-                <div class="flex items-center justify-between mb-4">
+            <a href="/files" class="card bg-white rounded-lg p-4 sm:p-6 block">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
                     <div class="p-2 bg-green-50 rounded">
-                        <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">Файлы</h3>
-                <p class="text-sm text-gray-600">Хранилище документов</p>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Файлы</h3>
+                <p class="text-xs sm:text-sm text-gray-600">Хранилище документов</p>
             </a>
 
-            <!-- API -->
-            <a href="/api/docs" class="card bg-white rounded-lg p-6 block">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="p-2 bg-purple-50 rounded">
-                        <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            <!-- Доска -->
+            <a href="/desk" class="card bg-white rounded-lg p-4 sm:p-6 block">
+                <div class="flex items-center justify-between mb-3 sm:mb-4">
+                    <div class="p-2 bg-indigo-50 rounded">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-1">API</h3>
-                <p class="text-sm text-gray-600">Документация для разработчиков</p>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">Доска</h3>
+                <p class="text-xs sm:text-sm text-gray-600">Онлайн доска для рисования</p>
+            </a>
+        </div>
+
+        <!-- API карточка -->
+        <div class="mt-3 sm:mt-6">
+            <a href="/api/docs" class="card bg-white rounded-lg p-4 sm:p-6 block">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div class="p-2 bg-purple-50 rounded flex-shrink-0">
+                        <svg class="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-1">API документация</h3>
+                        <p class="text-xs sm:text-sm text-gray-600">Техническая документация и интеграция</p>
+                    </div>
+                </div>
             </a>
         </div>
     </main>
+
+    <script>
+        // Функция для мобильного меню
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('open');
+        }
+
+        // Закрытие мобильного меню при клике на ссылку
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').classList.remove('open');
+            });
+        });
+    </script>
 </body>
 </html>
