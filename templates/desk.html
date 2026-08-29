@@ -1,10 +1,299 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Онлайн доска - TeachApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .note {
+            position: absolute;
+            min-width: 200px;
+            min-height: 200px;
+            cursor: move;
+            user-select: none;
+            transition: box-shadow 0.2s;
+        }
+        .note:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .note textarea {
+            resize: none;
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .toolbar-btn {
+            transition: all 0.2s;
+        }
+        .toolbar-btn:hover {
+            background-color: #f3f4f6;
+        }
+        .toolbar-btn.active {
+            background-color: #e5e7eb;
+        }
+        .color-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .color-btn:hover {
+            transform: scale(1.1);
+        }
+        .color-btn.active {
+            border-color: #3b82f6;
+        }
+    </style>
 </head>
 <body>
+    <!-- Навигация -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-semibold text-gray-900">TeachApp</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Главная</a>
+                    <a href="/books_page" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Библиотека</a>
+                    <a href="/information" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Информация</a>
+                    <a href="/desk" class="bg-gray-100 text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Доска</a>
+                    <a href="/files" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Файлы</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Панель инструментов -->
+    <div class="bg-white border-b border-gray-200 px-4 py-2 flex items-center gap-2 flex-wrap">
+        <button onclick="addNote()" class="toolbar-btn px-3 py-2 rounded-md text-sm font-medium flex items-center">
+            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Добавить стикер
+        </button>
+
+        <div class="border-l border-gray-200 h-6 mx-2"></div>
+
+        <!-- Цвета -->
+        <div class="flex items-center gap-1">
+            <button class="color-btn bg-yellow-200" onclick="setColor('#fef3c7')" title="Желтый"></button>
+            <button class="color-btn bg-green-200" onclick="setColor('#d1fae5')" title="Зеленый"></button>
+            <button class="color-btn bg-blue-200" onclick="setColor('#dbeafe')" title="Синий"></button>
+            <button class="color-btn bg-pink-200" onclick="setColor('#fce7f3')" title="Розовый"></button>
+            <button class="color-btn bg-purple-200" onclick="setColor('#ede9fe')" title="Фиолетовый"></button>
+            <button class="color-btn bg-white border border-gray-300" onclick="setColor('#ffffff')" title="Белый"></button>
+        </div>
+
+        <div class="border-l border-gray-200 h-6 mx-2"></div>
+
+        <button onclick="clearAll()" class="toolbar-btn px-3 py-2 rounded-md text-sm font-medium text-red-600 flex items-center">
+            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            Очистить всё
+        </button>
+
+        <span class="ml-auto text-sm text-gray-500" id="noteCount">0 заметок</span>
+    </div>
+
+    <!-- Рабочая область -->
+    <div id="deskArea" class="relative w-full h-[calc(100vh-130px)] overflow-auto" style="background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px); background-size: 20px 20px;">
+        <!-- Стикеры будут добавляться сюда -->
+    </div>
+
+    <script>
+        let notes = [];
+        let currentColor = '#fef3c7';
+        let zIndexCounter = 100;
+
+        // Добавление нового стикера
+        function addNote() {
+            const note = {
+                id: Date.now(),
+                x: 50 + Math.random() * 200,
+                y: 50 + Math.random() * 200,
+                color: currentColor,
+                text: ''
+            };
+
+            notes.push(note);
+            renderNotes();
+            updateNoteCount();
+        }
+
+        // Установка цвета
+        function setColor(color) {
+            currentColor = color;
+            // Обновляем активную кнопку цвета
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.style.backgroundColor === color ||
+                    (color === '#ffffff' && btn.classList.contains('bg-white'))) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Отрисовка всех стикеров
+        function renderNotes() {
+            const deskArea = document.getElementById('deskArea');
+            deskArea.innerHTML = '';
+
+            notes.forEach(note => {
+                const noteElement = createNoteElement(note);
+                deskArea.appendChild(noteElement);
+            });
+        }
+
+        // Создание DOM элемента стикера
+        function createNoteElement(note) {
+            const noteDiv = document.createElement('div');
+            noteDiv.className = 'note rounded-lg shadow-md';
+            noteDiv.style.left = note.x + 'px';
+            noteDiv.style.top = note.y + 'px';
+            noteDiv.style.backgroundColor = note.color;
+            noteDiv.style.zIndex = zIndexCounter++;
+            noteDiv.dataset.id = note.id;
+
+            // Кнопка удаления
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md opacity-0 hover:opacity-100 transition-opacity';
+            deleteBtn.innerHTML = `
+                <svg class="h-3 w-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            `;
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                deleteNote(note.id);
+            };
+
+            // Текстовая область
+            const textarea = document.createElement('textarea');
+            textarea.value = note.text;
+            textarea.placeholder = 'Введите текст...';
+            textarea.oninput = (e) => {
+                note.text = e.target.value;
+                updateNoteCount();
+            };
+
+            noteDiv.appendChild(deleteBtn);
+            noteDiv.appendChild(textarea);
+
+            // Перетаскивание
+            makeDraggable(noteDiv, note);
+
+            // Показываем кнопку удаления при наведении
+            noteDiv.onmouseenter = () => {
+                deleteBtn.style.opacity = '1';
+            };
+            noteDiv.onmouseleave = () => {
+                deleteBtn.style.opacity = '0';
+            };
+
+            return noteDiv;
+        }
+
+        // Перетаскивание стикера
+        function makeDraggable(element, note) {
+            let isDragging = false;
+            let startX, startY, startNoteX, startNoteY;
+
+            element.addEventListener('mousedown', (e) => {
+                if (e.target.tagName === 'TEXTAREA') return;
+
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startNoteX = note.x;
+                startNoteY = note.y;
+
+                element.style.zIndex = zIndexCounter++;
+                element.style.cursor = 'grabbing';
+
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                note.x = startNoteX + dx;
+                note.y = startNoteY + dy;
+
+                element.style.left = note.x + 'px';
+                element.style.top = note.y + 'px';
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                element.style.cursor = 'move';
+            });
+        }
+
+        // Удаление стикера
+        function deleteNote(id) {
+            notes = notes.filter(note => note.id !== id);
+            renderNotes();
+            updateNoteCount();
+        }
+
+        // Очистка всех стикеров
+        function clearAll() {
+            if (notes.length === 0) return;
+
+            if (confirm('Удалить все заметки?')) {
+                notes = [];
+                renderNotes();
+                updateNoteCount();
+            }
+        }
+
+        // Обновление счетчика
+        function updateNoteCount() {
+            const count = notes.filter(note => note.text.trim() !== '').length;
+            document.getElementById('noteCount').textContent = count + ' заметок';
+        }
+
+        // Добавление стикера при двойном клике
+        document.getElementById('deskArea').addEventListener('dblclick', (e) => {
+            if (e.target === e.currentTarget) {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const note = {
+                    id: Date.now(),
+                    x: e.clientX - rect.left - 100,
+                    y: e.clientY - rect.top - 100,
+                    color: currentColor,
+                    text: ''
+                };
+
+                notes.push(note);
+                renderNotes();
+                updateNoteCount();
+            }
+        });
+
+        // Инициализация
+        updateNoteCount();
+    </script>
 </body>
 </html>
