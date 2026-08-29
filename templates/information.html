@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информация - TeachApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .filter-btn {
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover {
+            border-color: #94a3b8;
+        }
+        .filter-btn.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    <span class="ml-2 text-xl font-semibold text-gray-900">TeachApp</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Главная</a>
+                    <a href="/books_page" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Библиотека</a>
+                    <a href="/information" class="bg-gray-100 text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Информация</a>
+                    <a href="/files" class="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-md text-sm font-medium">Файлы</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <!-- Заголовок -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Информация</h1>
+                <p class="text-gray-600">Заметки и материалы по предметам</p>
+            </div>
+            <button onclick="showAddInfoModal()" class="btn-primary px-4 py-2 rounded-md text-sm font-medium flex items-center">
+                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Добавить запись
+            </button>
+        </div>
+
+        <!-- Поиск -->
+        <div class="mb-6">
+            <div class="flex gap-2 max-w-2xl">
+                <div class="flex-1 relative">
+                    <input type="text" id="searchInput" oninput="searchInformation()" placeholder="Поиск по названию или содержанию..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <button onclick="searchInformation()" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 flex items-center">
+                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    Поиск
+                </button>
+            </div>
+        </div>
+
+        <!-- Фильтр по предметам -->
+        <div class="mb-6">
+            <div id="subjectsFilter" class="flex flex-wrap gap-2">
+                <!-- Предметы будут загружены через JavaScript -->
+            </div>
+        </div>
+
+        <!-- Список информации -->
+        <div id="informationList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Записи будут загружены через JavaScript -->
+        </div>
+
+        <!-- Пустое состояние -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <p class="text-gray-500">Нет записей</p>
+        </div>
+    </main>
+
+    <!-- Модальное окно -->
+    <div id="addInfoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-lg">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Добавить запись</h2>
+                <button onclick="hideAddInfoModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="addInfoForm" onsubmit="addInformation(event)">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Название *</label>
+                    <input type="text" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Предмет *</label>
+                    <input type="text" name="subject" required list="subjectsList" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <datalist id="subjectsList"></datalist>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Содержание *</label>
+                    <textarea name="text" rows="4" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button type="button" onclick="hideAddInfoModal()" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 text-sm font-medium">Отмена</button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-md text-sm font-medium">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentSubject = 'all';
+        let allInformation = [];
+
+        async function loadInformation() {
+            try {
+                const response = await fetch('/api/informations');
+                allInformation = await response.json();
+                displayInformation(allInformation);
+                loadSubjects();
+            } catch (error) {
+                console.error('Error loading information:', error);
+            }
+        }
+
+        function loadSubjects() {
+            const subjects = [...new Set(allInformation.map(item => item.subject).filter(Boolean))];
+            const subjectsFilter = document.getElementById('subjectsFilter');
+            const subjectsList = document.getElementById('subjectsList');
+
+            subjectsFilter.innerHTML = '';
+
+            const allButton = document.createElement('button');
+            allButton.className = 'filter-btn px-3 py-1.5 rounded text-sm font-medium ' + (currentSubject === 'all' ? 'active' : 'bg-white text-gray-700');
+            allButton.textContent = 'Все';
+            allButton.onclick = () => filterBySubject('all');
+            subjectsFilter.appendChild(allButton);
+
+            subjects.forEach(subject => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn px-3 py-1.5 rounded text-sm font-medium ' + (currentSubject === subject ? 'active' : 'bg-white text-gray-700');
+                button.textContent = subject;
+                button.onclick = () => filterBySubject(subject);
+                subjectsFilter.appendChild(button);
+
+                const option = document.createElement('option');
+                option.value = subject;
+                subjectsList.appendChild(option);
+            });
+        }
+
+        function filterBySubject(subject) {
+            currentSubject = subject;
+            loadSubjects();
+            searchInformation();
+        }
+
+        function displayInformation(information) {
+            const informationList = document.getElementById('informationList');
+            const emptyState = document.getElementById('emptyState');
+            informationList.innerHTML = '';
+
+            if (information.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            information.forEach(function(info) {
+                const infoCard = document.createElement('div');
+                infoCard.className = 'bg-white border border-gray-200 rounded-lg p-4';
+
+                infoCard.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-xs font-medium text-gray-500">${info.subject || 'Без предмета'}</span>
+                            </div>
+                            <h3 class="font-semibold text-gray-900">${info.name}</h3>
+                        </div>
+                        <button onclick="deleteInformation('${info.name}')" class="text-gray-400 hover:text-red-600 p-1">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                        </button>
+                    </div>
+                    ${info.text ? `<p class="text-sm text-gray-600 whitespace-pre-wrap">${info.text}</p>` : ''}
+                `;
+                informationList.appendChild(infoCard);
+            });
+        }
+
+        function searchInformation() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            let filtered = allInformation;
+
+            if (currentSubject !== 'all') {
+                filtered = filtered.filter(item => item.subject === currentSubject);
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm) ||
+                    (item.text && item.text.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            displayInformation(filtered);
+        }
+
+        function showAddInfoModal() {
+            document.getElementById('addInfoModal').classList.remove('hidden');
+        }
+
+        function hideAddInfoModal() {
+            document.getElementById('addInfoModal').classList.add('hidden');
+        }
+
+        async function addInformation(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const infoData = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/informations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(infoData)
+                });
+
+                if (response.ok) {
+                    hideAddInfoModal();
+                    form.reset();
+                    loadInformation();
+                } else {
+                    const error = await response.json();
+                    alert('Ошибка: ' + error.detail);
+                }
+            } catch (error) {
+                console.error('Error adding information:', error);
+                alert('Ошибка при добавлении записи');
+            }
+        }
+
+        async function deleteInformation(name) {
+            if (confirm('Удалить запись "' + name + '"?')) {
+                try {
+                    const response = await fetch('/api/informations/name/' + name, {
+                        method: 'DELETE'
+                    });
+
+                    if (response.ok) {
+                        loadInformation();
+                    }
+                } catch (error) {
+                    console.error('Error deleting information:', error);
+                }
+            }
+        }
+
+        loadInformation();
+    </script>
+</body>
+</html>

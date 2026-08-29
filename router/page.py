@@ -27,3 +27,14 @@ async def files_page(request: Request):
     """Страница файлов"""
     html_file = TEMPLATES_DIR / "files.html"
     return FileResponse(html_file)
+
+@router.get("/desk", response_class=HTMLResponse)
+async def get_desk(request: Request):
+    html_file = TEMPLATES_DIR / "desk.html"
+    return FileResponse(html_file)
+
+@router.get("/information", response_class=HTMLResponse)
+async def information_page(request: Request):
+    """Страница информации"""
+    html_file = TEMPLATES_DIR / "information.html"
+    return FileResponse(html_file)
