@@ -7,6 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        @media (max-width: 768px) {
+            nav .desktop-nav {
+                display: flex;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                white-space: nowrap;
+            }
+
+            nav .desktop-nav a {
+                flex-shrink: 0;
+            }
+        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc;
