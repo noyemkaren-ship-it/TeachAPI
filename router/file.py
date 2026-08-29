@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, status
 from fastapi.responses import FileResponse
-from typing import List
 import os
 import shutil
 from pathlib import Path
@@ -15,7 +14,6 @@ ALLOWED_EXTENSIONS = {".pdf", ".doc", ".docx", ".txt", ".md"}
 
 @router.post("/files/upload")
 async def upload_file(file: UploadFile = File(...)):
-    """Загрузка файла на сервер"""
     try:
         file_extension = Path(file.filename).suffix.lower()
 

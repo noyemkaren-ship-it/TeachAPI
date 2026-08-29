@@ -9,7 +9,6 @@ info_repo = InformationRepository()
 
 @router.get("/api/informations")
 async def get_informations():
-    """Получение всей информации"""
     try:
         return info_repo.get_all()
     except Exception as e:
@@ -41,7 +40,6 @@ async def get_information_by_subject(subject: str):
 
 @router.get("/api/informations/name/{name}")
 async def get_information_by_name(name: str):
-    """Получение информации по имени"""
     try:
         info = info_repo.get_by_name(name)
         if info is None:
@@ -88,7 +86,6 @@ async def delete_information_by_name(name: str):
 
 @router.delete("/api/informations/subject/{subject}")
 async def delete_information_by_subject(subject: str):
-    """Удаление информации по предмету"""
     try:
         result = info_repo.delete_by_subject(subject)
         if "not found" in result["Message"].lower():

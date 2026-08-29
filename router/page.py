@@ -3,7 +3,6 @@ from fastapi import APIRouter, Request
 from pathlib import Path
 
 router = APIRouter(tags=["pages"])
-
 TEMPLATES_DIR = Path("templates")
 
 
@@ -34,5 +33,4 @@ async def desk_page(request: Request):
 
 @router.get("/info/{name}", response_class=HTMLResponse)
 async def info_page(request: Request, name: str):
-    """Страница конкретной информации"""
     return FileResponse(TEMPLATES_DIR / "info.html")
