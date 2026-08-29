@@ -1,2 +1,3 @@
 from .book import BookRepository
-__all__ = ['BookRepository']
+from information import InformationRepository
+__all__ = ['BookRepository', 'InformationRepository']
